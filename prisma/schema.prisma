@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Message {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId   // Mongo’s native ID
+  clientId    String     @unique                                                // Frontend-generated UUID/nanoid
+  content     String
+  nickname    String
+  room        String
+  createdAt   DateTime   @default(now())
+
+  // Reply relationship (via clientId)
+  parentClientId  String?
+  parent         Message?   @relation("ClientReplies", fields: [parentClientId], references: [clientId], onDelete: NoAction, onUpdate: NoAction)
+  replies        Message[]  @relation("ClientReplies")
+}
+
+
+
