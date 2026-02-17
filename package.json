@@ -1,7 +1,13 @@
 {
+  "name": "chatserver",
   "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "build": "prisma generate"
+  },
   "dependencies": {
     "@prisma/client": "^6.17.1",
+    "cors": "^2.8.5",
     "express": "^5.1.0",
     "geohash": "^0.0.1",
     "haversine-distance": "^1.2.4",
@@ -9,5 +15,8 @@
   },
   "devDependencies": {
     "prisma": "^6.17.1"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

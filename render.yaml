@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: chatserver
+    runtime: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: DATABASE_URL
+        sync: false # set manually in Render dashboard
+      - key: NODE_ENV
+        value: production
