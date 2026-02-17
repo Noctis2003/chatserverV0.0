@@ -1,5 +1,5 @@
 // server.js
-//
+// not getting the server response on /getroom
 import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
@@ -23,13 +23,13 @@ const data=
     "name": "NIT JAL", 
     "lat": 31.396418, 
     "lon": 75.537029, 
-    "radius": 1.5 
+    "radius": 3.5 
   },
   "my_home": { 
     "name": "My Home", 
-    "lat": 30.3365, 
+    "lat": 30.3355, 
     "lon": 76.397, 
-    "radius": 1.5 
+    "radius": 3.5 
   }
 }
 
@@ -106,10 +106,13 @@ function getRoomForUser(userLat, userLon) {
 }
 
 app.post('/getroom', (req, res) => {
+ 
   const { lat, lon } = req.body;
+  console.log("Received location:", lat, lon); 
   console.log(`Finding room for user at (${lat}, ${lon})`);
    try {
     const room = getRoomForUser(lat, lon);
+    console.log("Found room:", room);
     if (room) {
       res.json({ room });
     } else {
@@ -123,3 +126,4 @@ app.post('/getroom', (req, res) => {
 server.listen(3001, () => {
   console.log("Server running on http://localhost:3001");
 });
+// graceful exiting is what is lacking
