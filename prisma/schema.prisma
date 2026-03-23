@@ -8,18 +8,29 @@ datasource db {
 }
 
 model Message {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId   // Mongo’s native ID
-  clientId    String     @unique                                                // Frontend-generated UUID/nanoid
-  content     String
-  nickname    String
-  room        String
-  createdAt   DateTime   @default(now())
-
-  // Reply relationship (via clientId)
-  parentClientId  String?
+  id             String     @id @default(auto()) @map("_id") @db.ObjectId
+  clientId       String     @unique
+  content        String
+  nickname       String
+  room           String
+  createdAt      DateTime   @default(now())
+  
+  // Existing Reply relationship
+  parentClientId String?
   parent         Message?   @relation("ClientReplies", fields: [parentClientId], references: [clientId], onDelete: NoAction, onUpdate: NoAction)
   replies        Message[]  @relation("ClientReplies")
+
+  // New Reactions relationship
+  reactions      Reaction[]
 }
 
+model Reaction {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  emoji       String   // e.g., "👍", "❤️", "😂", "😮", "😢"
+  userSecret  String   // The secret stored on their UI to identify them
+  message     Message  @relation(fields: [messageId], references: [id])
+  messageId   String   @db.ObjectId
 
+  @@unique([userSecret, messageId]) // Prevents one user from reacting multiple times to the same message
+}
 
